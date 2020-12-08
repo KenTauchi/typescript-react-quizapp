@@ -19,20 +19,25 @@ function App() {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-  console.log("userAnswers ", userAnswers);
+  const [diff, setDifficulty] = useState("easy");
+  const [qNum, setQnum] = useState("10");
+  const [seeScoreBtn, setSeeScoreBtn] = useState(false);
+  const [seeScore, setSeeScore] = useState(false);
+  const [backBtn, setBackBtn] = useState(false);
 
-  const TOTAL_QUESTION = 10;
+  const selectDif = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDifficulty(event.target.value);
+  };
 
-  console.log(questions);
+  const selectNum = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setQnum(event.target.value);
+  };
 
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
 
-    const newQuestions = await fetchQuizQuestions(
-      TOTAL_QUESTION,
-      Difficulty.EASY
-    );
+    const newQuestions = await fetchQuizQuestions(qNum, diff);
 
     setQuestions(newQuestions);
     setScore(0);
@@ -55,35 +60,77 @@ function App() {
       };
 
       setUserAnswers((prev) => [...prev, answerObj]);
+      if (!loading && number === parseInt(qNum) - 1) {
+        setSeeScoreBtn(true);
+      }
     }
   };
 
   const nextQuestion = () => {
     const nextQuestion = number + 1;
-    if (nextQuestion === TOTAL_QUESTION) {
+    if (nextQuestion === parseInt(qNum)) {
       setGameOver(true);
     } else {
       setNumber(nextQuestion);
     }
   };
 
+  const seeScoreFunc = () => {
+    setGameOver(true);
+    setSeeScore(true);
+    setBackBtn(true);
+  };
+
+  const reset = () => {
+    setQuestions([]);
+    setNumber(0);
+    setUserAnswers([]);
+    setScore(0);
+    setGameOver(true);
+    setDifficulty("easy");
+    setQnum("10");
+    setSeeScoreBtn(false);
+    setSeeScore(false);
+    setBackBtn(false);
+  };
+
   return (
     <div className="App">
       <h1>Quiz</h1>
-      {gameOver || userAnswers.length === TOTAL_QUESTION ? (
-        <button className="start" onClick={startTrivia}>
-          Start
-        </button>
+
+      {gameOver && !backBtn ? (
+        <form>
+          <label>Difficulty:</label>
+          <select className="difficulty" name="difficulty" onChange={selectDif}>
+            {Object.keys(Difficulty).map((dif) => (
+              <option value={dif} key={dif}>
+                {dif}
+              </option>
+            ))}
+          </select>
+          <label>Number of Qs:</label>
+          <select className="numQ" name="numQ" onChange={selectNum}>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+          </select>
+          <input
+            type="submit"
+            className="start"
+            onClick={startTrivia}
+            value="Start"
+          />
+        </form>
       ) : null}
 
-      {!gameOver && <p className="score">Score: {score}</p>}
+      {seeScore && <p className="score">Score: {score}</p>}
 
       {loading && <p>Loading Questions ...</p>}
 
       {!loading && !gameOver && (
         <QuestionCard
           qNum={number + 1}
-          totalQ={10}
+          totalQ={parseInt(qNum)}
           question={questions[number].question}
           answers={questions[number].answers}
           userAnswer={userAnswers ? userAnswers[number] : undefined}
@@ -94,11 +141,22 @@ function App() {
       {!gameOver &&
       !loading &&
       userAnswers.length === number + 1 &&
-      number !== TOTAL_QUESTION - 1 ? (
+      number !== parseInt(qNum) - 1 ? (
         <button className="next" onClick={nextQuestion}>
           Next Question
         </button>
       ) : null}
+
+      {seeScoreBtn && !gameOver && (
+        <button className="seeScore" onClick={seeScoreFunc}>
+          See Score
+        </button>
+      )}
+      {backBtn && (
+        <button className="back" onClick={reset}>
+          Back
+        </button>
+      )}
     </div>
   );
 }

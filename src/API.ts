@@ -1,5 +1,3 @@
-import { StringLiteral } from "typescript";
-
 import { shuffleArray } from "./utils";
 
 export type Question = {
@@ -15,14 +13,15 @@ export type Question = {
 export type QuestionState = Question & { answers: string[] };
 
 export enum Difficulty {
-  EASY = "easy",
-  MEDIUM = "medium",
-  HARD = "hard",
+  easy = "easy",
+  medium = "medium",
+  hard = "hard",
 }
 
-const fetchQuizQuestions = async (amount: number, difficulty: Difficulty) => {
+const fetchQuizQuestions = async (amount: string, difficulty: string) => {
   const endPoint = `https:opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
   const data = await (await fetch(endPoint)).json();
+
   return data.results.map((question: Question) => ({
     //   first return all exsisting values in the array
     ...question,
