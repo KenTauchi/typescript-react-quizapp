@@ -5,6 +5,8 @@ import { QuestionState, Difficulty } from "./API";
 
 import QuestionCard from "./components/QuestionCard";
 
+import { GlobalStyle } from "./app.styles";
+
 export type AnswerObject = {
   question: string;
   answer: string;
@@ -95,69 +97,76 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Quiz</h1>
+    <>
+      <GlobalStyle />
+      <div className="App">
+        <h1>Quiz</h1>
 
-      {gameOver && !backBtn ? (
-        <form>
-          <label>Difficulty:</label>
-          <select className="difficulty" name="difficulty" onChange={selectDif}>
-            {Object.keys(Difficulty).map((dif) => (
-              <option value={dif} key={dif}>
-                {dif}
-              </option>
-            ))}
-          </select>
-          <label>Number of Qs:</label>
-          <select className="numQ" name="numQ" onChange={selectNum}>
-            <option value={10}>10</option>
-            <option value={15}>15</option>
-            <option value={20}>20</option>
-          </select>
-          <input
-            type="submit"
-            className="start"
-            onClick={startTrivia}
-            value="Start"
+        {gameOver && !backBtn ? (
+          <form>
+            <label>Difficulty:</label>
+            <select
+              className="difficulty"
+              name="difficulty"
+              onChange={selectDif}
+            >
+              {Object.keys(Difficulty).map((dif) => (
+                <option value={dif} key={dif}>
+                  {dif}
+                </option>
+              ))}
+            </select>
+            <label>Number of Qs:</label>
+            <select className="numQ" name="numQ" onChange={selectNum}>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={20}>20</option>
+            </select>
+            <input
+              type="submit"
+              className="start"
+              onClick={startTrivia}
+              value="Start"
+            />
+          </form>
+        ) : null}
+
+        {seeScore && <p className="score">Score: {score}</p>}
+
+        {loading && <p>Loading Questions ...</p>}
+
+        {!loading && !gameOver && (
+          <QuestionCard
+            qNum={number + 1}
+            totalQ={parseInt(qNum)}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnswer}
           />
-        </form>
-      ) : null}
+        )}
 
-      {seeScore && <p className="score">Score: {score}</p>}
+        {!gameOver &&
+        !loading &&
+        userAnswers.length === number + 1 &&
+        number !== parseInt(qNum) - 1 ? (
+          <button className="next" onClick={nextQuestion}>
+            Next Question
+          </button>
+        ) : null}
 
-      {loading && <p>Loading Questions ...</p>}
-
-      {!loading && !gameOver && (
-        <QuestionCard
-          qNum={number + 1}
-          totalQ={parseInt(qNum)}
-          question={questions[number].question}
-          answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
-          callback={checkAnswer}
-        />
-      )}
-
-      {!gameOver &&
-      !loading &&
-      userAnswers.length === number + 1 &&
-      number !== parseInt(qNum) - 1 ? (
-        <button className="next" onClick={nextQuestion}>
-          Next Question
-        </button>
-      ) : null}
-
-      {seeScoreBtn && !gameOver && (
-        <button className="seeScore" onClick={seeScoreFunc}>
-          See Score
-        </button>
-      )}
-      {backBtn && (
-        <button className="back" onClick={reset}>
-          Back
-        </button>
-      )}
-    </div>
+        {seeScoreBtn && !gameOver && (
+          <button className="seeScore" onClick={seeScoreFunc}>
+            See Score
+          </button>
+        )}
+        {backBtn && (
+          <button className="back" onClick={reset}>
+            Back
+          </button>
+        )}
+      </div>
+    </>
   );
 }
 
