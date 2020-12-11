@@ -5,7 +5,7 @@ import { QuestionState, Difficulty } from "./API";
 
 import QuestionCard from "./components/QuestionCard";
 
-import { GlobalStyle } from "./app.styles";
+import { GlobalStyle, Wrapper } from "./app.styles";
 
 export type AnswerObject = {
   question: string;
@@ -99,7 +99,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <div className="App">
+      <Wrapper>
         <h1>Quiz</h1>
 
         {gameOver && !backBtn ? (
@@ -165,7 +165,7 @@ function App() {
             Back
           </button>
         )}
-      </div>
+      </Wrapper>
     </>
   );
 }
