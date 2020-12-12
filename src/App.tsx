@@ -118,9 +118,9 @@ function App() {
             </select>
             <label>Number of Qs:</label>
             <select className="numQ" name="numQ" onChange={selectNum}>
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-              <option value={20}>20</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
             </select>
             <input
               type="submit"
