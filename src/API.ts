@@ -22,10 +22,10 @@ export enum Difficulty {
 }
 
 const fetchQuizQuestions = async (amount: string, difficulty: string) => {
-  const endPoint = `https:opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
-  var host = window.location.host;
+  const endPoint = `/opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
+  var host = await window.location.host;
   console.log(host);
-  const endPoint2 = endPoint.replace(host, "https://");
+  const endPoint2 = await endPoint.replace(host, "");
 
   const data = await (await fetch(endPoint2)).json();
 
