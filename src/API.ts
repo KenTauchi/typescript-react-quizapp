@@ -1,4 +1,3 @@
-import axios from "axios";
 import { shuffleArray } from "./utils";
 require("dotenv").config();
 
@@ -25,10 +24,6 @@ export enum Difficulty {
 
 const fetchQuizQuestions = async (amount: string, difficulty: string) => {
   const endPoint = `${process.env.REACT_APP_API_URL}api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
-  axios.get(endPoint).then((result) => {
-    const data = result;
-    console.log(result);
-  });
   const data = await (await fetch(endPoint)).json();
 
   return data.results.map((question: Question) => ({
