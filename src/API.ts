@@ -19,7 +19,7 @@ export enum Difficulty {
 }
 
 const fetchQuizQuestions = async (amount: string, difficulty: string) => {
-  const endPoint = `https:opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
+  const endPoint = `https://typescript-react-quizapp.vercel.app/https:opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
   const data = await (await fetch(endPoint)).json();
 
   return data.results.map((question: Question) => ({
