@@ -24,7 +24,10 @@ export enum Difficulty {
 
 const fetchQuizQuestions = async (amount: string, difficulty: string) => {
   const endPoint = `${process.env.REACT_APP_API_URL}api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
-  const data = await (await fetch(endPoint)).json();
+  var host = window.location.host;
+  const endPoint2 = endPoint.replace("host", "https://:");
+
+  const data = await (await fetch(endPoint2)).json();
 
   return data.results.map((question: Question) => ({
     //   first return all exsisting values in the array
