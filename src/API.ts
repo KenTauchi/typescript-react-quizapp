@@ -1,4 +1,8 @@
 import { shuffleArray } from "./utils";
+require("dotenv").config();
+
+// const env = process.env;
+// console.log(process.env.REACT_APP_API_URL);
 
 export type Question = {
   category: string;
@@ -19,7 +23,7 @@ export enum Difficulty {
 }
 
 const fetchQuizQuestions = async (amount: string, difficulty: string) => {
-  const endPoint = `https:opentdb.com/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
+  const endPoint = `${process.env.REACT_APP_API_URL}api.php?amount=${amount}&difficulty=${difficulty}&type=multiple`;
   const data = await (await fetch(endPoint)).json();
 
   return data.results.map((question: Question) => ({
